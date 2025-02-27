@@ -10,8 +10,8 @@ import {
 } from "../components/ui/sheet";
 
 import { Button } from "../components/ui/button";
-import { TeacherPortalSidebar } from "../appUi/components/TeacherNavLinks";
-import { TopBar } from "../appUi/components/PortalNav";
+// import { TeacherPortalSidebar } from "../appUi/components/TeacherNavLinks";
+// import { TopBar } from "../appUi/components/PortalNav";
 
 
 
@@ -25,13 +25,13 @@ const TeacherPortalLayout = () => {
       {/* Mobile Sidebar */}
       <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
         <SheetContent side="left" className="p-0 w-64">
-          <TeacherPortalSidebar isMobile={true} />
+          {/* <TeacherPortalSidebar isMobile={true} /> */}
         </SheetContent>
       </Sheet>
 
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
-        <TeacherPortalSidebar isMobile={false} />
+        {/* <TeacherPortalSidebar isMobile={false} /> */}
       </div>
 
       <div className="flex flex-col flex-1 overflow-hidden">
@@ -46,7 +46,7 @@ const TeacherPortalLayout = () => {
           </Button>
         </div>
 
-        <TopBar />
+        {/* <TopBar /> */}
 
         <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
           <Outlet />

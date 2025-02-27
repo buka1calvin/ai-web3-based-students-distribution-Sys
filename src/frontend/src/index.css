@@ -3,21 +3,8 @@
 @tailwind utilities;
 
 body {
-  font-family: "Outfit", sans-serif !important;
+  /* font-family: "Outfit", sans-serif !important; */
 }
-
-
-
-/* .Hero {
-  background-image: url("/icons/hero-bg.svg");
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  overflow: hidden;
-  display: flex;
-  gap: 50px;
-} */
 
 @layer base {
   :root {
