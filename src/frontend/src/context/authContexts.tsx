@@ -1,60 +1,77 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getStoredUserData } from "../api/signin";
-import { logoutApi } from "../api/logout";
+
+interface UserData {
+  token: string;
+  number: string;
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: any | null;
-  login: (token: string) => void;
+  userData: UserData | null;
+  login: (token: string, number: string) => void;
   logout: () => void;
   loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+export const getStoredUserData = (): UserData | null => {
+  const storedData = sessionStorage.getItem("userData");
+  if (!storedData) return null;
+  
+  try {
+    return JSON.parse(storedData);
+  } catch {
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     checkAuth();
   }, []);
-
+  
   const checkAuth = () => {
-    const userData = getStoredUserData();
-    if (userData) {
-      setUser(userData);
+    const data = getStoredUserData();
+    if (data) {
+      setUserData(data);
       setIsAuthenticated(true);
     }
     setLoading(false);
   };
-
-  const login = (token: string) => {
-    localStorage.setItem("authToken", token);
-    checkAuth();
+  
+  const login = (token: string, number: string) => {
+    const userData = { token, number };
+    sessionStorage.setItem("userData", JSON.stringify(userData));
+    setUserData(userData);
+    setIsAuthenticated(true);
+    toast.success("Logged in successfully");
+    navigate("/distribute");
   };
-
+  
   const logout = async () => {
-    await logoutApi();
-    localStorage.removeItem("authToken");
-    setUser(null);
+    sessionStorage.removeItem("userData");
+    setUserData(null);
     setIsAuthenticated(false);
     toast.success("Logged out successfully");
-    navigate("/login");
+    navigate("/");
   };
-
+  
   const value = {
     isAuthenticated,
-    user,
+    userData,
     login,
     logout,
     loading,
   };
-
+  
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Logo } from "../molecules/logo";
 import { YearSelector } from "../molecules/yearSelector";
-import { LoginButton } from "../molecules/loginButton";
+import { LoginButton } from "./loginButton";
 
 interface NavbarProps {
   selectedYear: string;
