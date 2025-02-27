@@ -5,7 +5,7 @@ import { LevelOption } from "../organism/sidebar";
 
 interface LevelButtonProps {
   level: LevelOption;
-  selectedLevel: EducationLevel;
+  selectedLevel: string;
   onClick: (levelId: string) => void;
 }
 export const LevelButton: React.FC<LevelButtonProps> = ({

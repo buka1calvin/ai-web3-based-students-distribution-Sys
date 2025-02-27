@@ -7,7 +7,7 @@ import { EducationLevel } from "./topNavbarTabs";
 interface SidebarProps {
   sidebarSearch: string;
   setSidebarSearch: (search: string) => void;
-  selectedLevel: EducationLevel;
+  selectedLevel: string;
   setSelectedLevel: (level: string) => void;
 }
 

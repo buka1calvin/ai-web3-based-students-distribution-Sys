@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState,useEffect, useRef } from "react";
 import { Camera, Upload } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import {
@@ -14,7 +14,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../../components/ui/tabs";
-import jsQR from "jsqr"; // You'll need to install this package: npm install jsqr
+import jsQR from "jsqr";
+import toast from "react-hot-toast";
 
 interface QRData {
   token: string;
@@ -63,18 +64,17 @@ export const QRCodeScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
   };
 
   const scanQRCode = () => {
-    if (!scanning || !videoRef.current || !canvasRef.current) return;
 
     const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
+    const canvas = canvasRef.current as any;
+    const context = canvas?.getContext("2d");
 
-    if (context && video.readyState === video.HAVE_ENOUGH_DATA) {
-      canvas.height = video.videoHeight;
-      canvas.width = video.videoWidth;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    if (context && video?.readyState === video?.HAVE_ENOUGH_DATA) {
+      canvas.height = video?.videoHeight;
+      canvas.width = video?.videoWidth;
+      context?.drawImage(video, 0, 0, canvas?.width, canvas?.height);
 
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      const imageData = context.getImageData(0, 0, canvas?.width, canvas?.height);
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: "dontInvert",
       });
@@ -88,8 +88,7 @@ export const QRCodeScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
             return;
           }
         } catch (err) {
-          // Keep scanning, this was not a valid JSON QR code
-          console.log("error________________", err)
+          toast.error(err instanceof Error ? err.message : String(err));
         }
       }
       requestAnimationFrame(scanQRCode);
@@ -97,7 +96,6 @@ export const QRCodeScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
       requestAnimationFrame(scanQRCode);
     }
   };
-
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -105,7 +103,7 @@ export const QRCodeScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
     setError(null);
 
     const reader = new FileReader();
-    
+
     reader.onload = (event) => {
       const img = new Image();
       img.onload = () => {
@@ -162,7 +160,7 @@ export const QRCodeScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
     );
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activeTab === "camera") {
       startCamera();
     } else {

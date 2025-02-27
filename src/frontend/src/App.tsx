@@ -1,12 +1,24 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import routes from "./Routes";
 import PublicRoute from "./guard/PublicRoute";
 import { Toaster } from "react-hot-toast";
-import { RouteChild, RouteConfig } from "./types/routes/ route";
 import ProtectedRoute from "./guard/protecteRoutes";
 import { AuthProvider } from "./context/authContexts";
+import { RouteChild, RouteConfig } from "./types/routes/ route";
+
+interface UpdatedRouteConfig extends Omit<RouteConfig, "allowedRoles"> {
+  protected: boolean;
+  path: string;
+  element: React.FC;
+  children?: UpdatedRouteChild[];
+}
+
+interface UpdatedRouteChild extends Omit<RouteChild, "allowedRoles"> {
+  protected: boolean;
+  path: string;
+  element: React.FC;
+}
 
 const App = () => {
   return (
@@ -20,7 +32,7 @@ const App = () => {
                 path={route.path}
                 element={
                   route.protected ? (
-                    <ProtectedRoute allowedRoles={route.allowedRoles}>
+                    <ProtectedRoute path={route.path}>
                       <route.element />
                     </ProtectedRoute>
                   ) : (
@@ -38,9 +50,7 @@ const App = () => {
                         path={childRoute.path}
                         element={
                           childRoute.protected ? (
-                            <ProtectedRoute
-                              allowedRoles={childRoute.allowedRoles}
-                            >
+                            <ProtectedRoute path={childRoute.path}>
                               <childRoute.element />
                             </ProtectedRoute>
                           ) : (

@@ -3,6 +3,7 @@ import PortalLayout from "./layouts/PortalLayout";
 import TeacherPortalLayout from "./layouts/TeacherPortalLayout";
 import { RouteConfig } from "./types/routes/ route";
 import Home from "./pages/home";
+import MarkDistribution from "./pages/markDistribution";
 
 const routes: RouteConfig[] = [
   {
@@ -14,10 +15,20 @@ const routes: RouteConfig[] = [
         path: "",
         element: Home,
         protected: false,
-        allowedRoles: ["admin", "student", "teacher"],
       },
     ],
-    allowedRoles: ["admin", "student", "teacher"],
+  },
+  {
+    path: "/distribute",
+    element: Layout,
+    protected: false,
+    children: [
+      {
+        path: "",
+        element: MarkDistribution,
+        protected: true,
+      },
+    ],
   },
 ];
 
