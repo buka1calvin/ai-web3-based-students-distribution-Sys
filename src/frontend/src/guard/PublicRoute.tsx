@@ -1,21 +1,21 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-
 import { useAuth } from "../context/authContexts";
 
-const restrictedRoutes = ["/login", "/signup"];
+const restrictedRoutes = ["/", "/login"];
+
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, user, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
   if (isAuthenticated && restrictedRoutes.includes(location.pathname)) {
-    const dashboardPath =
-      user.role === "teacher" ? "/teacher-portal" : "/student-portal";
-    return <Navigate to={dashboardPath} replace />;
+    return <Navigate to="/distribute" replace />;
   }
+
   return <>{children}</>;
 };
 

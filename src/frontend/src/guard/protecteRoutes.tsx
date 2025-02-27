@@ -5,23 +5,20 @@ import Loading from "../appUi/components/atoms/loading";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedRoles?: string[];
+  path?: string;
 }
 
-const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const { isAuthenticated, user, loading } = useAuth();
+const ProtectedRoute = ({ children, path }: ProtectedRouteProps) => {
+  const { isAuthenticated, userData, loading } = useAuth();
   const location = useLocation();
-
   if (loading) {
     return <Loading />;
   }
-
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
-
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+  if (path === "/distribute" && location.pathname === "/distribute") {
+    return <>{children}</>;
   }
 
   return <>{children}</>;
