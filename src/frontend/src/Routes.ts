@@ -1,9 +1,9 @@
 import Layout from "./layouts/Layout";
 import PortalLayout from "./layouts/PortalLayout";
-import TeacherPortalLayout from "./layouts/TeacherPortalLayout";
 import { RouteConfig } from "./types/routes/ route";
 import Home from "./pages/home";
-import MarkDistribution from "./pages/markDistribution";
+import DistributedStudentsList from "./pages/admin/DistributedStudentsList";
+import LocateStudents from "./pages/admin/LocateStudents";
 
 const routes: RouteConfig[] = [
   {
@@ -19,13 +19,18 @@ const routes: RouteConfig[] = [
     ],
   },
   {
-    path: "/distribute",
-    element: Layout,
-    protected: false,
+    path: "/portal",
+    element: PortalLayout,
+    protected: true,
     children: [
       {
-        path: "",
-        element: MarkDistribution,
+        path: "distributed",
+        element: DistributedStudentsList,
+        protected: true,
+      },
+      {
+        path: "locate",
+        element: LocateStudents,
         protected: true,
       },
     ],

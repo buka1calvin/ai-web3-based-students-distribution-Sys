@@ -1,20 +1,19 @@
-import React from 'react'
-// import PortalSideNav from '../appUi/components/PortalSideNav'
-import { Outlet } from 'react-router-dom'
-// import { TopBar } from '../appUi/components/PortalNav'
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+import { MainTemplate } from "../appUi/components/templates/home";
+import { ContentTemplate } from "../appUi/components/templates/content";
+import { Navbar } from "../appUi/components/organism/navbar";
+import { AdminSidebar } from "../appUi/components/organism/adminSidebar";
 
-const PortalLayout = () => {
+const PortalLayout: React.FC = () => {
+  const [selectedYear, setSelectedYear] = useState<string>("2024");
+
   return (
-    <main className='flex bg-slate-100'>
-      <div className="w-full flex flex-col md:w-44 shadow h-screen items-center justify-center mr-5">
-        {/* <PortalSideNav/> */}
-      </div>
-      <div className="min-h-screen w-full flex flex-col">
-        {/* <TopBar/> */}
-        <Outlet />
-      </div>
-    </main>
-  )
-}
+    <MainTemplate>
+      <Navbar selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
+      <ContentTemplate sidebar={<AdminSidebar />} content={<Outlet />} />
+    </MainTemplate>
+  );
+};
 
-export default PortalLayout
+export default PortalLayout;

@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children, path }: ProtectedRouteProps) => {
   if (!isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
-  if (path === "/distribute" && location.pathname === "/distribute") {
+  if (path === "/portal" && location.pathname === "/portal") {
     return <>{children}</>;
   }
 

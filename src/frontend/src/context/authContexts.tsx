@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUserData(userData);
     setIsAuthenticated(true);
     toast.success("Logged in successfully");
-    navigate("/distribute");
+    navigate("/portal");
   };
   
   const logout = async () => {
