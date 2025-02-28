@@ -39,7 +39,7 @@ export const DistributionToolbar = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       year: new Date().getFullYear().toString(),
-      level: "secondary",
+      level: "O-Level",
     },
   });
 
@@ -50,9 +50,8 @@ export const DistributionToolbar = ({
   ];
 
   const levelOptions = [
-    { value: "primary", label: "Primary" },
-    { value: "secondary", label: "Secondary" },
-    { value: "university", label: "University" },
+    { value: "P-Level", label: "Primary" },
+    { value: "O-Level", label: "Secondary" },
   ];
 
   const handleDistribute = () => {

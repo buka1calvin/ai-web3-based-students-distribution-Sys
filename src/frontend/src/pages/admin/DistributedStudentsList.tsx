@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { DistributionTemplate } from "../../appUi/components/templates/distributionTemplate";
+import { students as initialStudents , schools as initialSchools } from "../../../constants";
 
 export type Combination = {
   combinationName: string;
@@ -30,131 +31,16 @@ interface School {
   combinations: string[];
 }
 
-// Sample test data
-const testStudents = [
-  {
-    id: 1,
-    name: "John Doe",
-    registrationNumber: "S12345",
-    score: 85,
-    selectedCombinations: [
-      { combinationName: "PCM", school: "School A" },
-      { combinationName: "PCB", school: "School B" },
-    ],
-    level: "secondary",
-    totalMarks: 85,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    registrationNumber: "S67890",
-    score: 92,
-    selectedCombinations: [
-      { combinationName: "HKL", school: "School C" },
-      { combinationName: "HGE", school: "School D" },
-    ],
-    level: "secondary",
-    totalMarks: 92,
-  },
-  {
-    id: 3,
-    name: "Michael Johnson",
-    registrationNumber: "P23456",
-    score: 75,
-    selectedCombinations: [],
-    level: "primary",
-    totalMarks: 75,
-  },
-];
-
-const testSchools = [
-  {
-    name: "School A",
-    level: "secondary",
-    status: "excellent",
-    capacity: 100,
-    combinations: ["PCM", "PCB", "CBG"],
-  },
-  {
-    name: "School B",
-    level: "secondary",
-    status: "good",
-    capacity: 120,
-    combinations: ["PCB", "CBG", "HGE"],
-  },
-  {
-    name: "School C",
-    level: "secondary",
-    status: "normal",
-    capacity: 150,
-    combinations: ["HKL", "HGE", "ECA"],
-  },
-];
-
 const DistributionPage: React.FC = () => {
-  const [distributedStudents, setDistributedStudents] = useState<Student[]>([]);
+  const [distributedStudents, setDistributedStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>(initialStudents);
+  const [schools, setSchools] = useState<any[]>(initialSchools);
   const [isDistributing, setIsDistributing] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [schools, setSchools] = useState<School[]>([]);
-  const [students, setStudents] = useState<Student[]>([]);
   const [currentYear, setCurrentYear] = useState<string>(
     new Date().getFullYear().toString()
   );
   const [currentLevel, setCurrentLevel] = useState<string>("secondary");
-
-  const getSchools = async () => {
-    try {
-      const response = await axios.get(
-        `${(import.meta as any).env.VITE_CANISTER_ORIGIN}/schools`
-      );
-      setSchools(response.data);
-    } catch (error) {
-      console.error("Error fetching schools:", error);
-      toast.error("Failed to fetch schools data");
-    }
-  };
-
-  const getStudents = async () => {
-    try {
-      const response = await axios.get(
-        `${(import.meta as any).env.VITE_CANISTER_ORIGIN}/students`
-      );
-      setStudents(response.data);
-    } catch (error) {
-      console.error("Error fetching students:", error);
-      toast.error("Failed to fetch student data");
-    }
-  };
-
-  const getDistributions = async (year: string, level: string) => {
-    try {
-      const response = await axios.get(
-        `${
-          (import.meta as any).env.VITE_CANISTER_ORIGIN
-        }/distribution/${year}/${level}`
-      );
-
-      if (response.data.success && response.data.data) {
-        setDistributedStudents(response.data.data.distributions || []);
-        toast.success(
-          `Loaded ${response.data.data.distributions.length} distributions`
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching distributions:", error);
-      // If 404, this is normal for new distributions
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        setDistributedStudents([]);
-      } else {
-        toast.error("Failed to fetch distribution data");
-      }
-    }
-  };
-
-  useEffect(() => {
-    getSchools();
-    getStudents();
-  }, []);
 
   const rankStudentPreferences = async (
     student: Student,
@@ -251,7 +137,7 @@ Return JSON:
         return;
       }
 
-      const distributionPromises = filteredStudents.map((student) =>
+      const distributionPromises = filteredStudents.map((student:any) =>
         rankStudentPreferences(student, schools)
       );
       const distributed = await Promise.all(distributionPromises);
@@ -356,9 +242,11 @@ Return JSON:
   };
 
   const handleUseTestData = () => {
-    setStudents(testStudents);
-    setSchools(testSchools);
+    setStudents(students);
+    console.log("students===",students)
+    setSchools(schools);
     toast.success("Test data loaded");
+    console.log("students===",schools)
   };
 
   return (

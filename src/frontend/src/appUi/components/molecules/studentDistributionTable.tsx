@@ -40,7 +40,6 @@ import {
       "Allocated Combination",
       "Reason"
     ];
-    
     return (
       <div className="border rounded-md">
         <Table>
