@@ -3,18 +3,18 @@ import { StableBTreeMap } from "azle";
 
 import express from "express";
 import cors from "cors";
-import { Distribution, DistributionData } from "./types";
+import { AuthorData, Distribution, DistributionData } from "./types";
 
-// Storage using Azle's StableBTreeMap
+
 const distributionStore = StableBTreeMap<string, DistributionData>(1);
-const studentIndex = StableBTreeMap<string, string>(2); // Registration number to key mapping
+const studentIndex = StableBTreeMap<string, string>(2); 
+const tokens = StableBTreeMap<string, AuthorData>(3)
 
 const app = express();
 app.use(cors());
-
 app.use(express.json());
 
-// Helper function to create a key
+
 function createKey(year: string, level: string): string {
   return `${year}-${level}`;
 }
@@ -50,8 +50,6 @@ app.get("/distribution/:year/:level", (req, res) => {
 app.get("/distribution", (req, res) => {
   try {
     const allData = distributionStore.values();
-
-    // Extract all distributions from all years/levels
     const allDistributions = allData.map((data) => data.distributions).flat();
 
     return res.json({
@@ -96,7 +94,6 @@ app.post("/distribution", (req, res) => {
       };
     }
 
-    // Process new distributions
     const newDistributions = distributions.map((dist) => {
       const {
         name,
@@ -107,7 +104,6 @@ app.post("/distribution", (req, res) => {
         totalMarks,
       } = dist;
 
-      // Validate required fields
       if (!name || !registrationNumber || !assignedSchool) {
         throw new Error(`Invalid distribution data: ${JSON.stringify(dist)}`);
       }
@@ -197,6 +193,70 @@ app.get("/distribution/student/:registrationNumber", (req, res) => {
     });
   }
 });
+
+// Login endpoint
+app.post("/auth/login", async (req, res) => {
+  const {token, number } = req.body;
+
+  const authUser = Array.from(users.values()).find(
+    (user) => user.email === email
+  );
+
+  if (!authUser) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  const validPassword = await bcrypt.compare(password, authUser.password);
+  if (!validPassword) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  // Generate new session ID on login
+  const sessionId = uuidv4();
+  authUser.sessionId = sessionId;
+  users.insert(authUser.id, authUser);
+
+  const userProfile = Array.from(userProfiles.values()).find(
+    (profile) => profile.id === authUser.id
+  );
+
+  return res.json({
+    success: true,
+    message: "Login successful",
+    sessionId,
+    userId: authUser.id,
+    role: authUser.role,
+    firstName: authUser.firstName,
+    lastName: authUser.lastName,
+    phone: authUser.phone,
+    email: authUser.email,
+    user: userProfile,
+  });
+});
+
+// Logout endpoint
+app.post("/auth/logout", verifySession, (req, res) => {
+  try {
+    // Get the user from the verified session
+    const user = (req as any).user;
+    
+    // Invalidate the session by clearing the sessionId
+    user.sessionId = "";
+    users.insert(user.id, user);
+
+    return res.json({
+      success: true,
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error during logout",
+    });
+  }
+});
+
 
 app.use(express.static("/dist"));
 app.listen();
