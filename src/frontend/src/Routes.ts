@@ -25,12 +25,12 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: "distributed",
-        element: DistributedStudentsList,
+        element: LocateStudents,
         protected: true,
       },
       {
         path: "locate",
-        element: LocateStudents,
+        element: DistributedStudentsList,
         protected: true,
       },
     ],

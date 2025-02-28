@@ -1,7 +1,6 @@
 export enum StudentLevel {
-  PRIMARY = "primary",
-  SECONDARY = "secondary",
-  UNIVERSITY = "university",
+  PRIMARY = "P-Level",
+  SECONDARY = "O-Level",
 }
 
 export enum StudentStatus {

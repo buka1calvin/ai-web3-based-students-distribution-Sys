@@ -8,15 +8,23 @@ import { Form } from "../../../components/ui/form";
 import React from "react";
 import { ImportDialog } from "../molecules/importDialog";
 import { ExportButton } from "../molecules/exportButton";
+import Loading from "../atoms/loading";
 
 interface DistributionToolbarProps {
   onDistribute: (year: string, level: string) => void;
   onSave: (year: string, level: string) => void;
-  onImport: (data: any[], year: string, level: string) => void;
+  onImport: (
+    data: any[],
+    year: string,
+    level: string,
+    dataType: "students" | "schools"
+  ) => void;
   onUseTestData: () => void;
   isDistributing: boolean;
   isSaving: boolean;
   distributedStudents: any[];
+  importedStudentsCount: number;
+  importedSchoolsCount: number;
 }
 
 const formSchema = z.object({
@@ -34,12 +42,14 @@ export const DistributionToolbar = ({
   isDistributing,
   isSaving,
   distributedStudents,
+  importedStudentsCount = 0,
+  importedSchoolsCount = 0,
 }: DistributionToolbarProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       year: new Date().getFullYear().toString(),
-      level: "secondary",
+      level: "O-Level",
     },
   });
 
@@ -50,9 +60,8 @@ export const DistributionToolbar = ({
   ];
 
   const levelOptions = [
-    { value: "primary", label: "Primary" },
-    { value: "secondary", label: "Secondary" },
-    { value: "university", label: "University" },
+    { value: "P-Level", label: "Primary" },
+    { value: "O-Level", label: "Secondary" },
   ];
 
   const handleDistribute = () => {
@@ -66,9 +75,9 @@ export const DistributionToolbar = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="p-4 border rounded-lg bg-white shadow-sm">
       <Form {...form}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <SelectField
             name="year"
             label="Academic Year"
@@ -81,38 +90,77 @@ export const DistributionToolbar = ({
             options={levelOptions}
             control={form.control}
           />
+          <div className="flex flex-col justify-end">
+            <div className="text-sm text-gray-500 mb-2">
+              {importedStudentsCount > 0 && (
+                <span className="mr-3 px-3 py-2 bg-blue-100 text-blue-800 rounded-full text-xs">
+                  {importedStudentsCount} Students
+                </span>
+              )}
+              {importedSchoolsCount > 0 && (
+                <span className="px-3 py-2 bg-green-100 text-green-800 rounded-full text-xs">
+                  {importedSchoolsCount} Schools
+                </span>
+              )}
+            </div>
+          </div>
         </div>
-      </Form>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="border-primary border w-full my-1"></div>
         <div className="flex flex-wrap gap-2">
-          <ImportDialog onImport={onImport} />
-          <Button variant="outline" onClick={onUseTestData} className="gap-2">
+          <ImportDialog
+            onImport={(data, year, level) =>
+              onImport(data, year, level, "students")
+            }
+            title="Import Students"
+            description="Upload an Excel file containing student information"
+          />
+
+          <ImportDialog
+            onImport={(data, year, level) =>
+              onImport(data, year, level, "schools")
+            }
+            title="Import Schools"
+            description="Upload an Excel file containing school information"
+          />
+
+          <Button onClick={onUseTestData} className="gap-2 text-black bg-red-200/25">
             <Database size={16} />
-            Use Test Data
+            Get Data Automatically
           </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <ExportButton data={distributedStudents} />
+          <div className="border-primary border w-full"></div>
           <Button
-            variant="secondary"
             onClick={handleDistribute}
-            isLoading={isDistributing}
-            disabled={isDistributing}
-            className="gap-2"
+            disabled={
+              isDistributing ||
+              (importedStudentsCount === 0 && importedSchoolsCount === 0)
+            }
+            className="gap-2 text-black"
           >
-            <Play size={16} />
+            {isDistributing ? (
+              <div className="mt-4">
+                <Loading />
+              </div>
+            ) : (
+              <Play className="text-green-500 font-bold" size={16} />
+            )}
             Distribute Students
           </Button>
+
           <Button
-            variant="default"
+            variant="outline"
             onClick={handleSave}
-            isLoading={isSaving}
             disabled={isSaving || distributedStudents.length === 0}
+            className="gap-2 bg-black text-white"
           >
-            Save Distribution
+            {isSaving ? "save..." : "Save Distribution"}
           </Button>
+
+          <ExportButton
+            data={distributedStudents}
+            filename="student-distribution"
+          />
         </div>
-      </div>
+      </Form>
     </div>
   );
 };
