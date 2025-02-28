@@ -13,7 +13,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (isAuthenticated && restrictedRoutes.includes(location.pathname)) {
-    return <Navigate to="/distribute" replace />;
+    return <Navigate to="/portal" replace />;
   }
 
   return <>{children}</>;
