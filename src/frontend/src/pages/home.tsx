@@ -18,9 +18,9 @@ const ExaminationPortal: React.FC = () => {
   const [sidebarSearch, setSidebarSearch] = useState<string>("");
   const [searchPerformed, setSearchPerformed] = useState<boolean>(false);
   const [results, setResults] = useState<any[]>([]);
+  //@ts-ignore
   const [resultsCache, setResultsCache] = useState<ResultsCache>({});
 
-  // Demo data - this would come from an API in a real app
   const demoData: any[] = [
     {
       id: 1,
@@ -67,7 +67,6 @@ const ExaminationPortal: React.FC = () => {
   const handleSearch = (): void => {
     if (!registrationNumber) return;
 
-    // Check cache first
     const cacheKey = `${registrationNumber}-${selectedYear}-${selectedLevel}`;
     if (resultsCache[cacheKey]) {
       setResults(resultsCache[cacheKey]);
@@ -75,7 +74,6 @@ const ExaminationPortal: React.FC = () => {
       return;
     }
 
-    // Simulate API call with setTimeout
     setTimeout(() => {
       const filteredResults = demoData.filter((result) => {
         return (
@@ -88,7 +86,7 @@ const ExaminationPortal: React.FC = () => {
       });
 
       // Update cache
-      setResultsCache((prev) => ({
+      setResultsCache((prev: any) => ({
         ...prev,
         [cacheKey]: filteredResults,
       }));
@@ -98,7 +96,6 @@ const ExaminationPortal: React.FC = () => {
     }, 500);
   };
 
-  // Clear results when filters change
   useEffect(() => {
     setResults([]);
     setSearchPerformed(false);
@@ -107,14 +104,13 @@ const ExaminationPortal: React.FC = () => {
   return (
     <MainTemplate>
       <Navbar selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
-
       <ContentTemplate
         sidebar={
           <Sidebar
             sidebarSearch={sidebarSearch}
             setSidebarSearch={setSidebarSearch}
             selectedLevel={selectedLevel}
-            setSelectedLevel={setSelectedLevel}
+            setSelectedLevel={setSelectedLevel as any}
           />
         }
         content={
@@ -131,7 +127,6 @@ const ExaminationPortal: React.FC = () => {
               setRegistrationNumber={setRegistrationNumber}
               handleSearch={handleSearch}
             />
-
             <ResultsList
               results={searchPerformed ? results : []}
               selectedYear={selectedYear}
