@@ -34,8 +34,3 @@ export type DistributionData = {
   distributions: Distribution[];
   lastUpdated: Date;
 };
-
-export type AuthorData = {
-token: string;
-number: string;
-}
