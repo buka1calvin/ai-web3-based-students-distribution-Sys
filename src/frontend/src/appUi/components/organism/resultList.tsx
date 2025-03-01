@@ -16,7 +16,7 @@ import { Button } from "../../../components/ui/button";
 import Loading from "../atoms/loading";
 import CustomDialog from "../atoms/CustomDialog";
 import { Table, TableBody, TableCell, TableRow } from "../../../../src/components/ui/table";
-import { TableHeader } from "../atoms/tableHeader";
+import { TableHeader } from "../atoms/tableHeader"
 
 interface ResultsListProps {
   results: any[];
