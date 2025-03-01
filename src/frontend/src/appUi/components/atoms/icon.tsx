@@ -9,7 +9,7 @@ interface IconWrapperProps {
 export const IconWrapper: React.FC<IconWrapperProps> = ({
   icon: Icon,
   size = 4,
-  className,
+  className = "",
 }) => {
   return <Icon className={`h-${size} w-${size} ${className}`} />;
 };

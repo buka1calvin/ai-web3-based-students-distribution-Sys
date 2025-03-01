@@ -3,9 +3,9 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableHeader,
     TableRow,
   } from "../../../components/ui/table";
-import { TableHeader } from "../atoms/tableHeader";
 
   
   export type Combination = {

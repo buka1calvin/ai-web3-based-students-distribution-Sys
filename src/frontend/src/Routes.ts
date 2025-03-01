@@ -21,17 +21,17 @@ const routes: RouteConfig[] = [
   {
     path: "/portal",
     element: PortalLayout,
-    protected: false,
+    protected: true,
     children: [
       {
         path: "distributed",
         element: DistributedStudentsList,
-        protected: false,
+        protected: true,
       },
       {
         path: "locate",
         element: LocateStudents,
-        protected: false,
+        protected: true,
       },
     ],
   },
