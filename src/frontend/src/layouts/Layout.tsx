@@ -5,7 +5,7 @@ import React from "react";
 
 const Layout = () => {
   return (
-    <main className="w-full h-screen overflow-y-scroll">
+    <main className="w-full h-full">
       <Outlet />
       <div className="mt-32"></div>
     </main>

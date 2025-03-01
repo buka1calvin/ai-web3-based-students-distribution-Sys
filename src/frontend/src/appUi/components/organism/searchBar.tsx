@@ -10,7 +10,7 @@ interface SearchBarProps {
  export  const SearchBar: React.FC<SearchBarProps> = ({ registrationNumber, setRegistrationNumber, handleSearch }) => (
     <div className="mb-6  p-3 rounded-md ">
       <SearchInput 
-        placeholder="0000R000000" 
+        placeholder="Search by registration number..." 
         value={registrationNumber} 
         onChange={setRegistrationNumber}
         onSearch={handleSearch}
