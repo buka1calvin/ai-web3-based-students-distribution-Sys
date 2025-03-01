@@ -55,7 +55,7 @@ app.get("/distribution", (req, res) => {
     return res.json({
       success: true,
       count: allDistributions.length,
-      data: allDistributions,
+      data: allData,
     });
   } catch (error) {
     console.error("Error retrieving distributions:", error);

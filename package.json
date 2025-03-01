@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "cd src/frontend && VITE_CANISTER_ORIGIN=http://$(dfx canister id backend).raw.localhost:8000 vite",
-    "build": "cd src/frontend && VITE_CANISTER_ORIGIN=http://$(dfx canister id backend).raw.localhost:8000 vite build",
-    "deploy": "dfx deploy && echo VITE_CANISTER_ORIGIN=http://$(dfx canister id backend).raw.localhost:8000",
+    "start": "cd src/frontend && VITE_CANISTER_ORIGIN=http://$(dfx canister id backend).raw.localhost:4943 vite",
+    "build": "cd src/frontend && VITE_CANISTER_ORIGIN=http://$(dfx canister id backend).raw.localhost:4943 vite build",
+    "deploy": "dfx deploy && echo VITE_CANISTER_ORIGIN=http://$(dfx canister id backend).raw.localhost:4943",
     "pretest": "ts-node --transpile-only --ignore=false --skip-project test/pretest.ts",
     "test": "ts-node --transpile-only --ignore=false --skip-project test/test.ts"
   },
