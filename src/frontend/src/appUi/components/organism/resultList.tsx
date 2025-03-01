@@ -76,7 +76,7 @@ export const ResultsList: React.FC<ResultsListProps> = ({
         </div>
       ) : (
         <div className="p-8 text-center text-gray-500">
-          <Loading />
+          Your result will be  displayed here 
         </div>
       )}
     </CardContent>
