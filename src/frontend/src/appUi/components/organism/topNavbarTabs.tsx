@@ -1,7 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from "../../../components/ui/tabs";
 import React from "react";
 
-export type EducationLevel = "Primary" | "O'Level";
+export type EducationLevel = "P-Level" | "O-Level";
 
 interface TopNavTabsProps {
   selectedLevel: EducationLevel;
@@ -17,15 +17,15 @@ const TopNavTabs: React.FC<TopNavTabsProps> = ({
       <TabsList className="w-full  justify-start">
         <TabsTrigger
           className="rounded-full font-bold  bg-secondary"
-          value="Primary"
-          onClick={() => setSelectedLevel("Primary")}
+          value="P-Level"
+          onClick={() => setSelectedLevel("P-Level")}
         >
           Primary
         </TabsTrigger>
         <TabsTrigger
-          value="O'Level"
+          value="O-Level"
           className="rounded-full  bg-secondary font-bold"
-          onClick={() => setSelectedLevel("O'Level")}
+          onClick={() => setSelectedLevel("O-Level")}
         >
           O'Level
         </TabsTrigger>

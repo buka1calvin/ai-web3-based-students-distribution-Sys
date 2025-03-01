@@ -1,5 +1,4 @@
 import React from "react";
-import TopNavTabs from "../organism/topNavbarTabs";
 
 interface ContentTemplateProps {
   sidebar: React.ReactNode;

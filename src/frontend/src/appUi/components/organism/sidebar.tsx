@@ -23,8 +23,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setSelectedLevel,
 }) => {
   const educationLevels: LevelOption[] = [
-    { id: "Primary", name: "Primary Level" },
-    { id: "O'Level", name: "O'Level" },
+    { id: "P-Level", name: "Primary Level" },
+    { id: "O-Level", name: "O'Level" },
   ];
 
   const filteredLevels = educationLevels.filter((level) =>
@@ -32,7 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   );
 
   return (
-    <aside className="w-64 mt-4 rounded-xl bg-white p-4 ring-1 ring-secondary">
+    <aside className="w-64 mt-4 rounded-xl bg-white p-4 ring-1 ring-secondary shadow-inner shadow-stone-50">
       <div className="mb-6">
         <SearchInput
           placeholder="Search levels..."
@@ -45,7 +45,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <Texts variant="label" className="mb-2 block">
           Choose Your Level
         </Texts>
-        <div className="space-y-1">
+        <div className="space-y-3">
           {filteredLevels.map((level) => (
             <LevelButton
               key={level.id}
